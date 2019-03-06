@@ -22,7 +22,7 @@
 
 
 import flask
-from flask import Flask, request
+from flask import Flask, request, Response, jsonify
 import json
 app = Flask(__name__)
 app.debug = True
@@ -74,17 +74,28 @@ def flask_post_json():
 @app.route("/")
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    return None
+    content = open("static/index.html").read()
+    return Response(content, mimetype="text/html")
+
+@app.route("/json2.js")
+def respondJSON2js():
+    content = open("static/json2.js").read()
+    return Response(content, mimetype="text/javascript")
+
 
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    return None
+    newDataFromClient = request.get_json()
+    myWorld.set(entity, newDataFromClient)
+    # myWorld.set(entity, )
+    return ""
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
-    return None
+    # print(myWorld.world())
+    return jsonify(myWorld.world())
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
