@@ -22,7 +22,7 @@
 
 
 import flask
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, make_response, redirect
 import json
 app = Flask(__name__)
 app.debug = True
@@ -74,8 +74,7 @@ def flask_post_json():
 @app.route("/")
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    content = open("static/index.html").read()
-    return Response(content, mimetype="text/html")
+    return redirect("static/index.html",301)
 
 @app.route("/json2.js")
 def respondJSON2js():
@@ -86,10 +85,12 @@ def respondJSON2js():
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    newDataFromClient = request.get_json()
-    myWorld.set(entity, newDataFromClient)
-    # myWorld.set(entity, )
-    return ""
+    # newDataFromClient = request.get_json()
+    # myWorld.set(entity, newDataFromClient)
+    v = flask_post_json()
+    myWorld.set( entity, v )
+    return jsonify(myWorld.get(entity))
+    
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
@@ -100,12 +101,13 @@ def world():
 @app.route("/entity/<entity>")    
 def get_entity(entity):
     '''This is the GET version of the entity interface, return a representation of the entity'''
-    return None
+    return jsonify(myWorld.get(entity))
 
 @app.route("/clear", methods=['POST','GET'])
 def clear():
     '''Clear the world out!'''
-    return None
+    myWorld.clear()
+    return jsonify(myWorld.world())
 
 if __name__ == "__main__":
     app.run()
