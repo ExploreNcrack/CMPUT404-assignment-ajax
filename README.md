@@ -11,7 +11,6 @@ Contributors / Licensing
 ========================
 
 Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle.
-
-</br>Name: Zhaozhen Liang
-</br>CCID: zhaozhen
+</br>**Name: Zhaozhen Liang**
+</br>**CCID: zhaozhen**
 
